@@ -1,25 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Router } from "@angular/router";
-import { Observable } from "rxjs";
+import {BehaviorSubject, delay, Observable, of, tap, throwError} from "rxjs";
 import { Usuario } from "../models/usuario.model";
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, delay, of, tap, throwError } from 'rxjs';
-import { Usuario } from '../models/usuario.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly usuariosMock: Usuario[] = [
     {
-      id: 'u-1',
-      nomeCompleto: 'Administrador do Catálogo',
-      email: 'admin@musica.com',
+      id: '1',
+      nomeCompleto: 'Administrador',
+      email: 'admin@gmail.com',
       senha: '123',
       perfil: 'ADMINISTRADOR'
     },
     {
-      id: 'u-2',
-      nomeCompleto: 'Usuário Consumidor',
-      email: 'user@musica.com',
+      id: '2',
+      nomeCompleto: 'Usuário Comum',
+      email: 'usuario@gmail.com',
       senha: '123',
       perfil: 'COMUM'
     }
