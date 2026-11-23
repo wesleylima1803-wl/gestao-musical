@@ -7,7 +7,7 @@
         <h2>Sistema Musical</h2>
       </div>
 
-      <!-- Lê o Observable usuario$ e guarda o valor atual na variável local "usuario" -->
+      <!--Lê o Observable usuario$ e guarda o valor atual na variável local "usuario" -->
       @if (usuario$ | async; as usuario) {
         <div class="usuarioInfo">
           <strong>{{ usuario.nomeCompleto }}</strong>
@@ -55,9 +55,7 @@
 
   </mat-sidenav>
 
-  <!-- Área principal à direita onde as páginas são exibidas -->
   <mat-sidenav-content class="conteudo-principal">
-
     <!-- Barra de progresso no topo: aparece automaticamente quando o CatalogoService está carregando -->
     @if (carregando$ | async) {
       <mat-progress-bar mode="indeterminate" class="barra-progresso"></mat-progress-bar>
@@ -76,5 +74,4 @@
     </main>
 
   </mat-sidenav-content>
-
 </mat-sidenav-container>
