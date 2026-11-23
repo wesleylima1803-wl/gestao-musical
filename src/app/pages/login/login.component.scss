@@ -1,0 +1,41 @@
+.login-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1b5e20, #2e7d32);
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.btn-entrar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dicas-acesso {
+  margin-top: 16px;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #f1f8e9;
+  font-size: 0.85rem;
+
+  p {
+    margin: 4px 0;
+  }
+}

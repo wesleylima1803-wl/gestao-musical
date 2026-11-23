@@ -1,1 +1,51 @@
-<p>login works!</p>
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Sistema Musical</mat-card-title>
+      <mat-card-subtitle>Entre com seu e-mail e senha</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="entrar()" class="login-form">
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="admin@musica.com" />
+
+          @if (form.controls.email.hasError('required')) {
+            <mat-error>O e-mail é obrigatório.</mat-error>
+          } @else if (form.controls.email.hasError('email')) {
+            <mat-error>Digite um e-mail válido.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Senha</mat-label>
+          <input matInput type="password" formControlName="senha" />
+
+          @if (form.controls.senha.hasError('required')) {
+            <mat-error>A senha é obrigatória.</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="btn-entrar"
+          [disabled]="form.invalid || carregando">
+
+          @if (carregando) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            <span>Entrar</span>
+          }
+        </button>
+      </form>
+
+      <div class="dicas-acesso">
+        <p><strong>Admin:</strong> admin&#64;musica.com | <strong>Senha:</strong> 123</p>
+        <p><strong>Usuario Comum:</strong> user&#64;musica.com | <strong>Senha:</strong> 123</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
