@@ -28,14 +28,14 @@ import { NotificacaoService } from '../../services/notificacao.service';
 })
 
 export class LoginComponent {
-  private fb = inject(FormBuilder).nonNullable;
+  private formBuilder = inject(FormBuilder).nonNullable;
   private authService = inject(AuthService);
   private notificacao = inject(NotificacaoService);
   private router = inject(Router);
 
   carregando = false;
 
-  form = this.fb.group({
+  form = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     senha: ['', [Validators.required]]
   });
@@ -67,6 +67,7 @@ export class LoginComponent {
             this.router.navigate(['/consumidor/catalogo-bandas']);
           }
         },
+
         error: erro => {
           this.notificacao.erro(erro.message || 'Login inválido.');
         }
