@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, map, timer} from 'rxjs';
+import { BehaviorSubject, Observable, map, timer } from 'rxjs';
 import { Usuario } from '../models/usuario.model';
 
 @Injectable({ providedIn: 'root' })
-
 export class AuthService {
   private readonly usuariosLista: Usuario[] = [
-    { id: 'u-1',
+    {
+      id: '1',
       nomeCompleto: 'Administrador',
       email: 'admin@musica.com',
       senha: '123',
       perfil: 'ADMINISTRADOR'
     },
-    { id: 'u-2', nomeCompleto: 'Usuário Comum',
+    {
+      id: '2',
+      nomeCompleto: 'Usuário Comum', 
       email: 'user@musica.com',
       senha: '123',
       perfil: 'COMUM'
@@ -44,7 +46,7 @@ export class AuthService {
   }
 
   estaAutenticado(): boolean {
-    return !!this.usuarioSubject.value;
+    return this.usuarioSubject.value !== null;
   }
 
   ehAdmin(): boolean {
