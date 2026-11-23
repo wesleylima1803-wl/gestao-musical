@@ -1,1 +1,80 @@
-<p>sidebar works!</p>
+<mat-sidenav-container class="layout-container">
+
+  <mat-sidenav #sidenav mode="side" [opened]="true" class="sidebar">
+
+    <div class="sidebar-header">
+      <div class="marca">
+        <h2>Sistema Musical</h2>
+      </div>
+
+      <!-- Lê o Observable usuario$ e guarda o valor atual na variável local "usuario" -->
+      @if (usuario$ | async; as usuario) {
+        <div class="usuarioInfo">
+          <strong>{{ usuario.nomeCompleto }}</strong>
+          <span class="perfil-badge">{{ usuario.perfil }}</span>
+        </div>
+      }
+    </div>
+
+    <mat-nav-list class="nav-links">
+      @if (usuario$ | async; as usuario) {
+
+        @if (usuario.perfil === 'ADMINISTRADOR') {
+          <a mat-list-item routerLink="/admin/painel-recentes" routerLinkActive="link-ativo">
+            <span matListItemTitle>Painel de Recentes</span>
+          </a>
+
+          <a mat-list-item routerLink="/admin/central-cadastros" routerLinkActive="link-ativo">
+            <span matListItemTitle>Central de Cadastros</span>
+          </a>
+
+          <a mat-list-item routerLink="/consumidor/catalogo-bandas" routerLinkActive="link-ativo">
+            <span matListItemTitle>Catálogo Geral</span>
+          </a>
+
+        } @else {
+          <a mat-list-item routerLink="/consumidor/catalogo-bandas" routerLinkActive="link-ativo">
+            <mat-icon matListItemIcon>groups</mat-icon>
+            <span matListItemTitle>Catálogo de Bandas</span>
+          </a>
+
+          <a mat-list-item routerLink="/consumidor/catalogo-albuns" routerLinkActive="link-ativo">
+            <mat-icon matListItemIcon>album</mat-icon>
+            <span matListItemTitle>Álbuns</span>
+          </a>
+        }
+
+      }
+    </mat-nav-list>
+
+    <div class="sidebar-footer">
+      <button color="red" class="btn-sair" (click)="sair()">
+        Sair
+      </button>
+    </div>
+
+  </mat-sidenav>
+
+  <!-- Área principal à direita onde as páginas são exibidas -->
+  <mat-sidenav-content class="conteudo-principal">
+
+    <!-- Barra de progresso no topo: aparece automaticamente quando o CatalogoService está carregando -->
+    @if (carregando$ | async) {
+      <mat-progress-bar mode="indeterminate" class="barra-progresso"></mat-progress-bar>
+    }
+
+    <!-- Botão discreto para recolher/expandir a Sidebar (sem criar navbar de menu) -->
+    <div class="controle-menu">
+      <button mat-icon-button (click)="sidenav.toggle()" aria-label="Abrir ou fechar menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <!-- Aqui o Angular injeta a página atual (Painel de Recentes, Cadastros, Bandas ou Álbuns) -->
+    <main class="area-pagina">
+      <router-outlet></router-outlet>
+    </main>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
