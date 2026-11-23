@@ -3,6 +3,6 @@ export interface Musica {
   albumId: string;
   titulo: string;
   duracaoSegundos: number;
-  ordem: number;
+  numeroFaixa: number;
   explicito: boolean;
 }

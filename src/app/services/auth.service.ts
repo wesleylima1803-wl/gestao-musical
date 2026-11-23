@@ -1,58 +1,53 @@
 import { Injectable } from '@angular/core';
-import { Router } from "@angular/router";
-import {BehaviorSubject, delay, Observable, of, tap, throwError} from "rxjs";
-import { Usuario } from "../models/usuario.model";
+import {BehaviorSubject, Observable, map, timer} from 'rxjs';
+import { Usuario } from '../models/usuario.model';
 
 @Injectable({ providedIn: 'root' })
+
 export class AuthService {
-  private readonly usuariosMock: Usuario[] = [
-    {
-      id: '1',
+  private readonly usuariosLista: Usuario[] = [
+    { id: 'u-1',
       nomeCompleto: 'Administrador',
-      email: 'admin@gmail.com',
+      email: 'admin@musica.com',
       senha: '123',
       perfil: 'ADMINISTRADOR'
     },
-    {
-      id: '2',
-      nomeCompleto: 'Usuário Comum',
-      email: 'usuario@gmail.com',
+    { id: 'u-2', nomeCompleto: 'Usuário Comum',
+      email: 'user@musica.com',
       senha: '123',
       perfil: 'COMUM'
     }
   ];
 
-  private usuarioLogadoSubject = new BehaviorSubject<Usuario | null>(null);
-  usuarioLogado$ = this.usuarioLogadoSubject.asObservable();
+  private usuarioSubject = new BehaviorSubject<Usuario | null>(null);
+  usuarioLogado$ = this.usuarioSubject.asObservable();
 
   login(email: string, senha: string): Observable<Usuario> {
-    const usuario = this.usuariosMock.find(
-      u => u.email.toLowerCase() === email.trim().toLowerCase() && u.senha === senha
-    );
+    return timer(600).pipe(
+      map(() => {
+        const usuario = this.usuariosLista.find(
+          u => u.email.toLowerCase() === email.trim().toLowerCase() && u.senha === senha
+        );
 
-    if (!usuario) {
-      return throwError(() => new Error('Credenciais inválidas.')).pipe(delay(600));
-    }
+        if (!usuario) {
+          throw new Error('Login inválido.');
+        }
 
-    return of(usuario).pipe(
-      delay(600),
-      tap(u => this.usuarioLogadoSubject.next(u))
+        this.usuarioSubject.next(usuario);
+        return usuario;
+      })
     );
   }
 
   logout(): void {
-    this.usuarioLogadoSubject.next(null);
-  }
-
-  get usuarioAtual(): Usuario | null {
-    return this.usuarioLogadoSubject.value;
+    this.usuarioSubject.next(null);
   }
 
   estaAutenticado(): boolean {
-    return this.usuarioLogadoSubject.value !== null;
+    return !!this.usuarioSubject.value;
   }
 
   ehAdmin(): boolean {
-    return this.usuarioLogadoSubject.value?.perfil === 'ADMINISTRADOR';
+    return this.usuarioSubject.value?.perfil === 'ADMINISTRADOR';
   }
 }
