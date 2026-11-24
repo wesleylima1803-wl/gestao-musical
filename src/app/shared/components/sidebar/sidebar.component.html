@@ -7,7 +7,6 @@
         <h2>Sistema Musical</h2>
       </div>
 
-      <!--Lê o Observable usuario$ e guarda o valor atual na variável local "usuario" -->
       @if (usuario$ | async; as usuario) {
         <div class="usuarioInfo">
           <strong>{{ usuario.nomeCompleto }}</strong>

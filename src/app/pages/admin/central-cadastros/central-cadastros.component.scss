@@ -1,0 +1,35 @@
+.pagina-header {
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0 0 4px 0;
+  }
+
+  p {
+    margin: 0;
+    color: #555;
+  }
+}
+
+.form-card {
+  margin-top: 20px;
+  padding: 24px;
+  max-width: 720px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.campo-inteiro {
+  grid-column: 1 / -1;
+}
+
+.acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
