@@ -79,6 +79,14 @@ export class CatalogoService {
   private bandasSubject = new BehaviorSubject<Banda[]>(this.bandas);
   bandas$ = this.bandasSubject.asObservable();
 
+  albuns$ = this.bandas$.pipe(
+    map(() => this.getAllAlbuns())
+  );
+
+  musicas$ = this.bandas$.pipe(
+    map(() => this.getAllMusicas())
+  );
+
   private carregandoSubject = new BehaviorSubject<boolean>(false);
   carregando$ = this.carregandoSubject.asObservable();
 

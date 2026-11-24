@@ -1,0 +1,104 @@
+<div class="pagina-header">
+  <h1>Catálogo Geral</h1>
+  <p>Gerenciador do Sistema.</p>
+</div>
+
+<mat-tab-group>
+  @if (bandas$ | async; as bandas) {
+    <mat-tab [label]="'Todas as Bandas (' + bandas.length + ')'">
+      <div class="grid-cards">
+        @for (banda of bandas; track banda.id) {
+          <mat-card class="item-card">
+            <img mat-card-image [src]="banda.imagemPromocionalUrl" [alt]="banda.nome" class="card-img" />
+
+            <mat-card-header>
+              <mat-card-title>{{ banda.nome }}</mat-card-title>
+              <mat-card-subtitle>{{ banda.generoMusical }} - {{ banda.anoFormacao }}</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+              <p><strong>País:</strong> {{ banda.paisOrigem }}</p>
+              <p><strong>Álbuns:</strong> {{ banda.albuns.length }}</p>
+            </mat-card-content>
+
+            <mat-card-actions align="end">
+              <button mat-button color="primary" (click)="editarBanda(banda.id)">
+                <mat-icon>edit</mat-icon> Editar
+              </button>
+              <button mat-button color="warn" (click)="excluirBanda(banda)">
+                <mat-icon>delete</mat-icon> Excluir
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        } @empty {
+          <p class="mensagem-vazia">Nenhuma banda cadastrada no sistema.</p>
+        }
+      </div>
+    </mat-tab>
+  }
+
+  @if (albuns$ | async; as albuns) {
+    <mat-tab [label]="'Todos os Álbuns (' + albuns.length + ')'">
+      <div class="grid-cards">
+        @for (album of albuns; track album.id) {
+          <mat-card class="item-card">
+            <img mat-card-image [src]="album.imagemCapaUrl" [alt]="album.titulo" class="card-img" />
+
+            <mat-card-header>
+              <mat-card-title>{{ album.titulo }}</mat-card-title>
+              <mat-card-subtitle>{{ album.bandaNome }} - {{ album.anoLancamento }}</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+              <p><strong>Tipo:</strong> {{ album.tipo }}</p>
+              <p><strong>Faixas:</strong> {{ album.musicas.length }}</p>
+            </mat-card-content>
+
+            <mat-card-actions align="end">
+              <button mat-button color="primary" (click)="editarAlbum(album.id)">
+                <mat-icon>edit</mat-icon> Editar
+              </button>
+              <button mat-button color="warn" (click)="excluirAlbum(album)">
+                <mat-icon>delete</mat-icon> Excluir
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        } @empty {
+          <p class="mensagem-vazia">Nenhum álbum cadastrado no sistema.</p>
+        }
+      </div>
+    </mat-tab>
+  }
+
+  @if (musicas$ | async; as musicas) {
+    <mat-tab [label]="'Todas as Músicas (' + musicas.length + ')'">
+      <div class="grid-cards">
+        @for (musica of musicas; track musica.id) {
+          <mat-card class="item-card">
+            <mat-card-header>
+              <mat-card-title>#{{ musica.numeroFaixa }} {{ musica.titulo }}</mat-card-title>
+              <mat-card-subtitle>{{ musica.bandaNome }} — {{ musica.albumTitulo }}</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+              <p><strong>Duração:</strong> {{ musica.duracaoSegundos }}s</p>
+              <p><strong>Explícito:</strong> {{ musica.explicito ? 'Sim' : 'Não' }}</p>
+            </mat-card-content>
+
+            <mat-card-actions align="end">
+              <button mat-button color="primary" (click)="editarMusica(musica.id)">
+                <mat-icon>edit</mat-icon> Editar
+              </button>
+              <button mat-button color="warn" (click)="excluirMusica(musica)">
+                <mat-icon>delete</mat-icon> Excluir
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        } @empty {
+          <p class="mensagem-vazia">Nenhuma música cadastrada no sistema.</p>
+        }
+      </div>
+    </mat-tab>
+  }
+
+</mat-tab-group>

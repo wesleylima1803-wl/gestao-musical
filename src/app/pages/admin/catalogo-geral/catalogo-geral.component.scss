@@ -1,0 +1,37 @@
+.pagina-header {
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0 0 4px 0;
+  }
+
+  p {
+    margin: 0;
+    color: #555;
+  }
+}
+
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 20px 4px;
+}
+
+.item-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-img {
+  height: 180px;
+  object-fit: cover;
+}
+
+.mensagem-vazia {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #666;
+  padding: 32px;
+}

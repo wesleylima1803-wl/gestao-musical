@@ -13,6 +13,8 @@ export const authGuard: CanActivateFn = () => {
   }
 
   notificacao.erro('Você precisa fazer login para acessar esta página.');
+
   router.navigate(['/login']);
-  return false; // Obrigatório para cancelar a rota original
+
+  return false;
 };
