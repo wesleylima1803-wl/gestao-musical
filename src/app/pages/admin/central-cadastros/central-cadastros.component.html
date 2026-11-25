@@ -5,148 +5,182 @@
 
 <mat-tab-group [(selectedIndex)]="abaAtual">
 
-  <mat-tab [label]="editandoBanda ? 'Editar Banda' : 'Nova Banda'">
+  <mat-tab [label]="idBandaEdit ? 'Editar Banda' : 'Nova Banda'">
     <mat-card class="form-card">
-      <form #formBanda="ngForm" (ngSubmit)="salvarBanda()" class="form-grid">
-
+      <form [formGroup]="bandaForm" (ngSubmit)="salvarBanda()" class="form-grid">
         <mat-form-field>
           <mat-label>Nome da Banda</mat-label>
-          <input matInput name="nome" [(ngModel)]="bandaForm.nome" required />
+          <input matInput formControlName="nome" />
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Gênero</mat-label>
-          <input matInput name="generoMusical" [(ngModel)]="bandaForm.generoMusical" required />
+          <input matInput formControlName="generoMusical" />
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Ano de Formação</mat-label>
-          <input matInput type="number" name="anoFormacao" [(ngModel)]="bandaForm.anoFormacao" required />
+          <input matInput type="number" formControlName="anoFormacao" />
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>País de Origem</mat-label>
-          <input matInput name="paisOrigem" [(ngModel)]="bandaForm.paisOrigem" required />
+          <input matInput formControlName="paisOrigem" />
         </mat-form-field>
 
         <mat-form-field class="campo-inteiro">
           <mat-label>Imagem Promocional</mat-label>
-          <input matInput name="imagemPromocionalUrl" [(ngModel)]="bandaForm.imagemPromocionalUrl" required />
+          <input matInput formControlName="imagemPromocionalUrl" />
         </mat-form-field>
 
         <mat-form-field class="campo-inteiro">
           <mat-label>Biografia</mat-label>
-          <textarea matInput rows="3" name="biografia" [(ngModel)]="bandaForm.biografia" required></textarea>
+          <textarea matInput rows="3" formControlName="biografia"></textarea>
         </mat-form-field>
 
         <div class="acoes campo-inteiro">
-          @if (editandoBanda) {
+          @if (idBandaEdit) {
             <button mat-button type="button" (click)="cancelarEdicao()">Cancelar</button>
           }
-          <button mat-raised-button color="primary" type="submit" [disabled]="formBanda.invalid">
-            <mat-icon>save</mat-icon>
-            {{ editandoBanda ? 'Salvar Alterações' : 'Cadastrar Banda' }}
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="bandaForm.invalid || (carregando$ | async)">
+            @if (carregando$ | async) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              <mat-icon>save</mat-icon>
+              {{ idBandaEdit ? 'Salvar Alterações' : 'Cadastrar Banda' }}
+            }
           </button>
         </div>
       </form>
     </mat-card>
   </mat-tab>
 
-  <mat-tab [label]="editandoAlbum ? 'Editar Álbum' : 'Novo Álbum'">
+  <mat-tab [label]="idAlbumEdit ? 'Editar Álbum' : 'Novo Álbum'">
     <mat-card class="form-card">
-      <form #formAlbum="ngForm" (ngSubmit)="salvarAlbum()" class="form-grid">
-
+      <form [formGroup]="albumForm" (ngSubmit)="salvarAlbum()" class="form-grid">
         <mat-form-field class="campo-inteiro">
           <mat-label>Banda</mat-label>
-          <mat-select name="bandaId" [(ngModel)]="albumForm.bandaId" [disabled]="editandoAlbum" required>
-            @for (banda of bandas$ | async; track banda.id) {
-              <mat-option [value]="banda.id">{{ banda.nome }}</mat-option>
+          <mat-select formControlName="bandaId">
+            @if (bandas$ | async; as bandas) {
+              @for (banda of bandas; track banda.id) {
+                <mat-option [value]="banda.id">{{ banda.nome }}</mat-option>
+              }
             }
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Título do Álbum</mat-label>
-          <input matInput name="tituloAlbum" [(ngModel)]="albumForm.titulo" required />
+          <input matInput formControlName="titulo" />
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Ano de Lançamento</mat-label>
-          <input matInput type="number" name="anoLancamento" [(ngModel)]="albumForm.anoLancamento" required />
+          <input matInput type="number" formControlName="anoLancamento" />
         </mat-form-field>
 
         <mat-form-field>
-          <mat-label>Tipo</mat-label>
-          <mat-select name="tipo" [(ngModel)]="albumForm.tipo" required>
+          <mat-label>Tipo do Álbum</mat-label>
+          <mat-select formControlName="tipo">
             <mat-option value="COMPLETO">Álbum Completo</mat-option>
-            <mat-option value="SINGLE">Álbum Single</mat-option>
+            <mat-option value="SINGLE">Single</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Capa do Álbum</mat-label>
-          <input matInput name="imagemCapaUrl" [(ngModel)]="albumForm.imagemCapaUrl" required />
+          <input matInput formControlName="imagemCapaUrl" />
         </mat-form-field>
 
         <div class="acoes campo-inteiro">
-          @if (editandoAlbum) {
+          @if (idAlbumEdit) {
             <button mat-button type="button" (click)="cancelarEdicao()">Cancelar</button>
           }
-          <button mat-raised-button color="primary" type="submit" [disabled]="formAlbum.invalid">
-            <mat-icon>save</mat-icon>
-            {{ editandoAlbum ? 'Salvar Alterações' : 'Cadastrar Álbum' }}
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="albumForm.invalid || (carregando$ | async)">
+            @if (carregando$ | async) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              <mat-icon>save</mat-icon>
+              {{ idAlbumEdit ? 'Salvar Alterações' : 'Cadastrar Álbum' }}
+            }
           </button>
         </div>
-
       </form>
     </mat-card>
   </mat-tab>
 
-  <mat-tab [label]="editandoMusica ? 'Editar Música' : 'Nova Música'">
+  <mat-tab [label]="idMusicaEdit ? 'Editar Música' : 'Nova Música'">
     <mat-card class="form-card">
-      <form #formMusica="ngForm" (ngSubmit)="salvarMusica()" class="form-grid">
-
+      <form [formGroup]="musicaForm" (ngSubmit)="salvarMusica()" class="form-grid">
         <mat-form-field class="campo-inteiro">
-          <mat-label>Álbum</mat-label>
-          <mat-select name="albumId" [(ngModel)]="musicaForm.albumId" [disabled]="editandoMusica" required>
-            @for (album of albuns$ | async; track album.id) {
-              <mat-option [value]="album.id">{{ album.bandaNome }} — {{ album.titulo }}</mat-option>
+          <mat-label>Selecione a Banda</mat-label>
+          <mat-select formControlName="bandaId" (selectionChange)="aoSelecionarBandaNaMusica($event.value)">
+            @if (bandas$ | async; as bandas) {
+              @for (banda of bandas; track banda.id) {
+                <mat-option [value]="banda.id">{{ banda.nome }}</mat-option>
+              }
             }
           </mat-select>
         </mat-form-field>
 
         <mat-form-field class="campo-inteiro">
-          <mat-label>Título da Música</mat-label>
-          <input matInput name="tituloMusica" [(ngModel)]="musicaForm.titulo" required />
+          <mat-label>Selecione o Álbum</mat-label>
+          <mat-select formControlName="albumId">
+            @for (album of albunsDaBandaSelecionada; track album.id) {
+              <mat-option [value]="album.id">{{ album.titulo }} - ({{ album.anoLancamento }})</mat-option>
+            } @empty {
+              <mat-option disabled>Não há álbuns cadastrados para esta banda</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="campo-inteiro">
+          <mat-label>Título</mat-label>
+          <input matInput formControlName="titulo" />
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Número da Faixa</mat-label>
-          <input matInput type="number" min="1" name="numeroFaixa" [(ngModel)]="musicaForm.numeroFaixa" required />
+          <input matInput type="number" min="1" formControlName="numeroFaixa" />
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Duração em segundos</mat-label>
-          <input matInput type="number" min="1" name="duracaoSegundos" [(ngModel)]="musicaForm.duracaoSegundos" required />
+          <input matInput type="number" min="1" formControlName="duracaoSegundos" />
         </mat-form-field>
 
         <div class="campo-inteiro">
-          <mat-checkbox name="explicito" [(ngModel)]="musicaForm.explicito">
+          <mat-checkbox formControlName="explicito">
             Conteúdo Explícito
           </mat-checkbox>
         </div>
 
         <div class="acoes campo-inteiro">
-          @if (editandoMusica) {
+          @if (idMusicaEdit) {
             <button mat-button type="button" (click)="cancelarEdicao()">Cancelar</button>
           }
-          <button mat-raised-button color="primary" type="submit" [disabled]="formMusica.invalid">
-            <mat-icon>save</mat-icon>
-            {{ editandoMusica ? 'Salvar Alterações' : 'Cadastrar Música' }}
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="musicaForm.invalid || (carregando$ | async)">
+            @if (carregando$ | async) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              <mat-icon>save</mat-icon>
+              {{ idMusicaEdit ? 'Salvar Alterações' : 'Cadastrar Música' }}
+            }
           </button>
         </div>
       </form>
     </mat-card>
   </mat-tab>
-
 </mat-tab-group>
