@@ -20,6 +20,7 @@ import {
 
 import { NotificacaoService } from '../../../services/notificacao.service';
 import { DeleteConfirmacaoComponent } from '../../../shared/components/delete-confirmacao/delete-confirmacao.component';
+import {DuracaoPipe} from "../../../shared/pipes/formatar-duracao.pipe";
 
 @Component({
   selector: 'app-catalogo-geral',
@@ -31,7 +32,8 @@ import { DeleteConfirmacaoComponent } from '../../../shared/components/delete-co
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    DuracaoPipe
   ],
   templateUrl: './catalogo-geral.component.html',
   styleUrl: './catalogo-geral.component.scss'
