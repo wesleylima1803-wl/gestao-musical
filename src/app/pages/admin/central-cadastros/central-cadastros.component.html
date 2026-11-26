@@ -137,7 +137,7 @@
             @for (album of albunsDaBandaSelecionada; track album.id) {
               <mat-option [value]="album.id">{{ album.titulo }} - ({{ album.anoLancamento }})</mat-option>
             } @empty {
-              <mat-option disabled>Não há álbuns cadastrados para esta banda</mat-option>
+              <mat-option disabled>Não há álbuns cadastrados para esta banda no momento.</mat-option>
             }
           </mat-select>
         </mat-form-field>

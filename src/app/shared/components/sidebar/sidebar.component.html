@@ -51,26 +51,20 @@
         Sair
       </button>
     </div>
-
   </mat-sidenav>
 
   <mat-sidenav-content class="conteudo-principal">
-    <!-- Barra de progresso no topo: aparece automaticamente quando o CatalogoService está carregando -->
     @if (carregando$ | async) {
       <mat-progress-bar mode="indeterminate" class="barra-progresso"></mat-progress-bar>
     }
 
-    <!-- Botão discreto para recolher/expandir a Sidebar (sem criar navbar de menu) -->
     <div class="controle-menu">
       <button mat-icon-button (click)="sidenav.toggle()" aria-label="Abrir ou fechar menu">
         <mat-icon>menu</mat-icon>
       </button>
     </div>
-
-    <!-- Aqui o Angular injeta a página atual (Painel de Recentes, Cadastros, Bandas ou Álbuns) -->
     <main class="area-pagina">
       <router-outlet></router-outlet>
     </main>
-
   </mat-sidenav-content>
 </mat-sidenav-container>

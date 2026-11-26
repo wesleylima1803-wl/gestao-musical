@@ -1,1 +1,88 @@
-<p>painel-recentes works!</p>
+<div class="pagina-header">
+  <h1>Painel de Recentes</h1>
+  <p>Itens recentes de Músicas, Álbuns e Bandas.</p>
+  <p>Clique em cada item para editá-lo.</p>
+</div>
+@if (carregando$ | async) {
+  <div class="loading-container">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+} @else {
+  <div class="section-grid">
+    <section class="section">
+      <h2>
+        <mat-icon>groups</mat-icon>
+        Bandas Recentes
+      </h2>
+      @if (bandasRecentes$ | async; as bandas) {
+        <div class="cards-lista">
+          @for (banda of bandas; track banda.id) {
+            <mat-card class="item-card" (click)="editarItem('banda', banda.id)">
+              <mat-card-header>
+                <mat-card-title>{{ banda.nome }}</mat-card-title>
+                <mat-card-subtitle>Gênero: {{ banda.generoMusical }} - País de Origem: {{ banda.paisOrigem }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <span class="info-extra">Ano de Formação - {{ banda.anoFormacao }}</span>
+                <mat-icon class="icone-editar">edit</mat-icon>
+              </mat-card-content>
+            </mat-card>
+          } @empty {
+            <p class="vazio">Não há banda cadastrada no momento.</p>
+          }
+        </div>
+      }
+
+    </section>
+    <section class="section">
+      <h2>
+        <mat-icon>album</mat-icon>
+        Álbuns Recentes
+      </h2>
+      @if (albunsRecentes$ | async; as albuns) {
+        <div class="cards-lista">
+          @for (album of albuns; track album.id) {
+            <mat-card class="item-card" (click)="editarItem('album', album.id)">
+              <mat-card-header>
+                <mat-card-title>{{ album.titulo }}</mat-card-title>
+                <mat-card-subtitle>{{ album.bandaNome }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <span class="info-extra">
+                  {{ album.tipo === 'SINGLE' ? 'Single' : 'Álbum Completo' }} - {{ album.anoLancamento }}
+                </span>
+                <mat-icon class="icone-editar">edit</mat-icon>
+              </mat-card-content>
+            </mat-card>
+          } @empty {
+            <p class="vazio">Não há album cadastrado no momento.</p>
+          }
+        </div>
+      }
+    </section>
+    <section class="section">
+      <h2>
+        <mat-icon>music_note</mat-icon>
+        Músicas Recentes
+      </h2>
+      @if (musicasRecentes$ | async; as musicas) {
+        <div class="cards-lista">
+          @for (musica of musicas; track musica.id) {
+            <mat-card class="item-card" (click)="editarItem('musica', musica.id)">
+              <mat-card-header>
+                <mat-card-title>{{ musica.titulo }}</mat-card-title>
+                <mat-card-subtitle>{{ musica.bandaNome }} — {{ musica.albumTitulo }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <span class="info-extra">Faixa {{ musica.numeroFaixa }}</span>
+                <mat-icon class="icone-editar">edit</mat-icon>
+              </mat-card-content>
+            </mat-card>
+          } @empty {
+            <p class="vazio">Não há música cadastrada no momento.</p>
+          }
+        </div>
+      }
+    </section>
+  </div>
+}
