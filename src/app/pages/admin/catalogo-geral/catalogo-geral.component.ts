@@ -1,19 +1,23 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { Banda } from '../../../models/banda.model';
+
 import {
   AlbumComBanda,
   CatalogoService,
   MusicaComContexto
-} from '../../../services/catalogo.service';
+} from '../../../services/catalogo.service'
+
 import { NotificacaoService } from '../../../services/notificacao.service';
 import { DeleteConfirmacaoComponent } from '../../../shared/components/delete-confirmacao/delete-confirmacao.component';
 
@@ -26,34 +30,47 @@ import { DeleteConfirmacaoComponent } from '../../../shared/components/delete-co
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './catalogo-geral.component.html',
   styleUrl: './catalogo-geral.component.scss'
 })
-export class CatalogoGeralComponent {
+export class CatalogoGeralComponent implements OnInit {
   private catalogoService = inject(CatalogoService);
   private notificacao = inject(NotificacaoService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   bandas$ = this.catalogoService.bandas$;
   albuns$ = this.catalogoService.albuns$;
   musicas$ = this.catalogoService.musicas$;
+  carregando$ = this.catalogoService.carregando$;
+
+  ngOnInit(): void {
+    this.catalogoService
+      .getAllBandas()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
+  }
 
   editarBanda(bandaId: string): void {
+    if (!bandaId) return;
     this.router.navigate(['/admin/central-cadastros'], {
       queryParams: { tipo: 'banda', id: bandaId }
     });
   }
 
   editarAlbum(albumId: string): void {
+    if (!albumId) return;
     this.router.navigate(['/admin/central-cadastros'], {
       queryParams: { tipo: 'album', id: albumId }
     });
   }
 
   editarMusica(musicaId: string): void {
+    if (!musicaId) return;
     this.router.navigate(['/admin/central-cadastros'], {
       queryParams: { tipo: 'musica', id: musicaId }
     });
@@ -68,14 +85,19 @@ export class CatalogoGeralComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(exclusaoConfirmada => {
-      if (!exclusaoConfirmada)
-        return;
+    dialogRef.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(exclusaoConfirmada => {
+        if (!exclusaoConfirmada)
+          return;
 
-      this.catalogoService.excluirBanda(banda.id).subscribe(() => {
-        this.notificacao.sucesso('Banda excluída com sucesso!');
+        this.catalogoService
+          .excluirBanda(banda.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => {
+            this.notificacao.sucesso('Banda excluída com sucesso!');
+          });
       });
-    });
   }
 
   excluirAlbum(album: AlbumComBanda): void {
@@ -87,14 +109,18 @@ export class CatalogoGeralComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(exclusaoConfirmada => {
-      if (!exclusaoConfirmada)
-        return;
+    dialogRef.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(exclusaoConfirmada => {
+        if (!exclusaoConfirmada) return;
 
-      this.catalogoService.excluirAlbum(album.bandaId, album.id).subscribe(() => {
-        this.notificacao.sucesso('Álbum excluído com sucesso!');
+        this.catalogoService
+          .excluirAlbum(album.bandaId, album.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => {
+            this.notificacao.sucesso('Álbum excluído com sucesso!');
+          });
       });
-    });
   }
 
   excluirMusica(musica: MusicaComContexto): void {
@@ -106,13 +132,17 @@ export class CatalogoGeralComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(exclusaoConfirmada => {
-      if (!exclusaoConfirmada)
-        return;
+    dialogRef.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(exclusaoConfirmada => {
+        if (!exclusaoConfirmada) return;
 
-      this.catalogoService.excluirMusica(musica.albumId, musica.id).subscribe(() => {
-        this.notificacao.sucesso('Música excluída com sucesso!');
+        this.catalogoService
+          .excluirMusica(musica.albumId, musica.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => {
+            this.notificacao.sucesso('Música excluída com sucesso!');
+          });
       });
-    });
   }
 }
