@@ -4,7 +4,6 @@
 </div>
 
 <mat-tab-group [(selectedIndex)]="abaAtual">
-
   <mat-tab [label]="idBandaEdit ? 'Editar Banda' : 'Nova Banda'">
     <mat-card class="form-card">
       <form [formGroup]="bandaForm" (ngSubmit)="salvarBanda()" class="form-grid">

@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
-
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
 import { MatCardModule } from '@angular/material/card';
@@ -22,25 +22,37 @@ import { CatalogoService } from '../../../services/catalogo.service';
   templateUrl: './painel-recentes.component.html',
   styleUrl: './painel-recentes.component.scss'
 })
-export class PainelRecentesComponent {
+export class PainelRecentesComponent implements OnInit {
   private catalogoService = inject(CatalogoService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   private readonly qtd_recentes = 5;
 
   carregando$ = this.catalogoService.carregando$;
 
   bandasRecentes$ = this.catalogoService.bandas$.pipe(
-    map(bandas => [...bandas].reverse().slice(0, this.qtd_recentes))
+    map(bandas => bandas.slice(0, this.qtd_recentes))
   );
 
   albunsRecentes$ = this.catalogoService.albuns$.pipe(
-    map(albuns => [...albuns].reverse().slice(0, this.qtd_recentes))
+    map(albuns => albuns.slice(0, this.qtd_recentes))
   );
 
   musicasRecentes$ = this.catalogoService.musicas$.pipe(
-    map(musicas => [...musicas].reverse().slice(0, this.qtd_recentes))
+    map(musicas =>
+      [...musicas]
+        .sort((a, b) => Number(b.id) - Number(a.id))
+        .slice(0, this.qtd_recentes)
+    )
   );
+
+  ngOnInit(): void {
+    this.catalogoService
+      .getAllBandas()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
+  }
 
   editarItem(tipo: 'banda' | 'album' | 'musica', id: string): void {
     this.router.navigate(['/admin/central-cadastros'], {

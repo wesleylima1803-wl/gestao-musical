@@ -116,11 +116,14 @@ export class CatalogoService {
     this.bandasSubject.next([...this.bandas]);
   }
 
-  listarBandas(): Observable<Banda[]> {
+  getAllBandas(): Observable<Banda[]> {
     this.carregandoSubject.next(true);
 
     return timer(500).pipe(
-      map(() => [...this.bandas]),
+      map(() => {
+        this.atualizarTela();
+        return [...this.bandas];
+      }),
       finalize(() => this.carregandoSubject.next(false))
     );
   }
