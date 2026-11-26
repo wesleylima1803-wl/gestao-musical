@@ -1,0 +1,50 @@
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.painel {
+  margin-bottom: 32px;
+}
+
+.catalogo {
+  margin: 40px 0;
+  border: 0;
+  border-top: 1px solid #ddd;
+}
+
+.barra-topo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.titulo-app {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.links-navegacao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex: 1;
+}
+
+.acoes-teste {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ativo {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
+.conteudo-principal {
+  padding: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+}

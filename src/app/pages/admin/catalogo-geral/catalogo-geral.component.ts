@@ -38,6 +38,7 @@ import {DuracaoPipe} from "../../../shared/pipes/formatar-duracao.pipe";
   templateUrl: './catalogo-geral.component.html',
   styleUrl: './catalogo-geral.component.scss'
 })
+
 export class CatalogoGeralComponent implements OnInit {
   private catalogoService = inject(CatalogoService);
   private notificacao = inject(NotificacaoService);
@@ -114,7 +115,8 @@ export class CatalogoGeralComponent implements OnInit {
     dialogRef.afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(exclusaoConfirmada => {
-        if (!exclusaoConfirmada) return;
+        if (!exclusaoConfirmada)
+          return;
 
         this.catalogoService
           .excluirAlbum(album.bandaId, album.id)
